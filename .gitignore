@@ -1,0 +1,8 @@
+*.yaml
+*.jpg
+*.png
+*.log
+*.pyc
+demo.py
+event*
+checkpoint*
