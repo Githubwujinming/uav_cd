@@ -14,11 +14,11 @@ from PIL import Image
 
 from lightning.pytorch.cli import LightningCLI
 from lightning.pytorch import seed_everything
+from src.utils.cli import CDCLI
 
 from src.data.data_interface import DataModuleFromConfig
 from src.detector import CDDector
 def cli_main():
-    cli = LightningCLI(model_class=CDDector,datamodule_class=DataModuleFromConfig)
-    
+    cli = CDCLI(model_class=CDDector,datamodule_class=DataModuleFromConfig)
 if __name__ == "__main__":
     cli_main()
