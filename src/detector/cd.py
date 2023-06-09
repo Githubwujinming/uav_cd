@@ -13,6 +13,7 @@ from src.utils.scheduler import CosineWarmupScheduler
 class CDDector(pl.LightningModule):
     def __init__(self, nc=2, base_lr=0.01) -> None:
         super().__init__()
+        self.save_hyperparameters()
         self.learning_rate = base_lr
         self.detector = CDNet(nc=nc)
         self.training_metrics = RunningMetrics(num_classes=nc)
@@ -26,12 +27,13 @@ class CDDector(pl.LightningModule):
     def training_step(self, batch):
         x1, x2, label, _ = batch
         p1, p2, dist = self(x1, x2)
+        bs = x1.shape[0]
         dist = F.interpolate(dist, size=x1.shape[2:], mode='bilinear',align_corners=True)
         pred_L = torch.argmax(dist, dim=1, keepdim=True).long()
         loss = hybrid_loss(dist, label)
         
-        self.log('training/loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
-        self.log('training/lr', self.trainer.optimizers[0].param_groups[0]['lr'], on_step=True, on_epoch=True, logger=True)
+        self.log('training/loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True, batch_size=bs)
+        self.log('training/lr', self.trainer.optimizers[0].param_groups[0]['lr'], on_step=True, on_epoch=True, logger=True, batch_size=bs)
         
         self.training_metrics.update(pred_L.detach().cpu().numpy(), label.detach().cpu().numpy())
         
@@ -57,10 +59,9 @@ class CDDector(pl.LightningModule):
         
     # 这里配置优化器
     def configure_optimizers(self):
-        optimizer = torch.optim.SGD(list(self.detector.parameters()),
-                                  lr=self.learning_rate, weight_decay=1e-4, momentum=0.9)
-        
-        scheduler = CosineWarmupScheduler(optimizer=optimizer, warmup=100, max_iters=2000)
+        optimizer = torch.optim.AdamW(list(self.detector.parameters()),
+                                  lr=self.learning_rate)
+        scheduler = CosineWarmupScheduler(optimizer=optimizer, warmup=1000, max_iters=self.trainer.estimated_stepping_batches)
         return [optimizer], [scheduler]
     
     @torch.no_grad()
