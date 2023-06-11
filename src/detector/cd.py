@@ -11,11 +11,11 @@ from src.utils.metrics import RunningMetrics
 from src.utils.scheduler import CosineWarmupScheduler
 
 class CDDector(pl.LightningModule):
-    def __init__(self, nc=2, base_lr=0.01) -> None:
+    def __init__(self, detector: nn.Module, nc=2, base_lr=0.01) -> None:
         super().__init__()
         self.save_hyperparameters()
         self.learning_rate = base_lr
-        self.detector = CDNet(nc=nc)
+        self.detector = detector#CDNet(nc=nc)
         self.training_metrics = RunningMetrics(num_classes=nc)
         self.running_metrics = RunningMetrics(num_classes=nc)
 

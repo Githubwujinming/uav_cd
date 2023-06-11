@@ -19,6 +19,8 @@ from src.utils.cli import CDCLI
 from src.data.data_interface import DataModuleFromConfig
 from src.detector import CDDector
 def cli_main():
-    cli = CDCLI(model_class=CDDector,datamodule_class=DataModuleFromConfig)
+    cli = CDCLI(model_class=CDDector,
+                datamodule_class=DataModuleFromConfig, 
+                parser_kwargs={"parser_mode": "omegaconf"})
 if __name__ == "__main__":
     cli_main()
