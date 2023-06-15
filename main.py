@@ -18,6 +18,10 @@ from src.utils.cli import CDCLI
 
 from src.data.data_interface import DataModuleFromConfig
 from src.detector import CDDector
+'''
+Wu Jinming
+2023.6.10
+'''
 def cli_main():
     cli = CDCLI(model_class=CDDector,
                 datamodule_class=DataModuleFromConfig, 

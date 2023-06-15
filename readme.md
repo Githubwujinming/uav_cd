@@ -9,6 +9,10 @@ scipy
 yacs
 jsonargparse
 pytorch-lightning[extra]
+omegaconf
+albumentations
+pynecone
 
 # commands
-python main.py fit --config configs/models/cd.yaml --config configs/data/sup_data_100.yaml --config configs/trainer/gpu0.yaml
+nohup python main.py fit --config configs/models/cd2.yaml --config configs/data/sup_data_100.yaml --config configs/trainer/gpu1.yaml -n levir_dsahrn  > nohuplogs/levir_dsahrn.log 2>&1 &
+582861

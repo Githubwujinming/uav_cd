@@ -21,12 +21,12 @@ class CDDector(pl.LightningModule):
 
     def forward(self, pre_data, post_data):
         y1, y2, c = self.detector(pre_data, post_data)
-        return y1, y2, c
+        return c
 
 
     def training_step(self, batch):
         x1, x2, label, _ = batch
-        p1, p2, dist = self(x1, x2)
+        dist = self(x1, x2)
         bs = x1.shape[0]
         dist = F.interpolate(dist, size=x1.shape[2:], mode='bilinear',align_corners=True)
         pred_L = torch.argmax(dist, dim=1, keepdim=True).long()
@@ -67,7 +67,7 @@ class CDDector(pl.LightningModule):
     @torch.no_grad()
     def validation_step(self, batch, batch_idx):
         x1, x2, label, _ = batch
-        p1, p2, dist = self(x1, x2)
+        dist = self(x1, x2)
         dist = F.interpolate(dist, size=x1.shape[2:], mode='bilinear',align_corners=True)
         pred_L = torch.argmax(dist, dim=1, keepdim=True).long()
         self.running_metrics.update(pred_L.detach().cpu().numpy(), label.detach().cpu().numpy())
@@ -93,7 +93,7 @@ class CDDector(pl.LightningModule):
     @torch.no_grad()
     def test_step(self, batch, batch_idx):
         x1, x2, label, image_id = batch
-        p1, p2, dist = self(x1, x2)
+        dist = self(x1, x2)
         dist = F.interpolate(dist, size=x1.shape[2:], mode='bilinear',align_corners=True)
         pred = torch.argmax(dist, dim=1, keepdim=True).long()
         

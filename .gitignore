@@ -1,8 +1,13 @@
 *.yaml
 *.jpg
+*.JPG
 *.png
 *.log
 *.pyc
 demo.py
+*.ckpt
 event*
-checkpoint*
+checkpoint**.py[cod]
+.web
+__pycache__/
+pynecone.db
