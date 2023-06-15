@@ -1,0 +1,31 @@
+   
+data:
+  train:
+    data_dir: "/data/datasets/LEVIR-CD/"
+    batch_size: 24
+    crop_size: 256
+    shuffle: True
+    scale: True
+    augment: True
+    flip: True
+    rotate: True
+    blur: True
+    split: "train"
+    num_workers: 8
+    data_len: -1
+  validation:
+    data_dir: "/data/datasets/LEVIR-CD/"
+    batch_size: 8
+    val: True
+    shuffle: False
+    split: "val"
+    num_workers: 8
+    data_len: -1
+  test:
+    data_dir: "/data/datasets/LEVIR-CD/"
+    batch_size: 1
+    val: True
+    shuffle: False
+    split: "test"
+    num_workers: 1
+    data_len: -1

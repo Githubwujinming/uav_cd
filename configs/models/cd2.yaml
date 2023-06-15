@@ -1,0 +1,7 @@
+model:
+  base_lr: 0.0001
+  nc: 2
+  detector:
+    class_path: src.models.CDNet
+    init_args:
+      nc: ${model.nc}

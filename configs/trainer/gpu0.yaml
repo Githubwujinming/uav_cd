@@ -1,0 +1,16 @@
+trainer:
+  benchmark: True
+  accumulate_grad_batches: 1
+  accelerator: 'gpu'
+  devices: 
+    - 0
+  # precision: 16
+  max_epochs: 100
+  log_every_n_steps: 50
+CDModelCheckpoint:
+  mode: "max"
+  monitor: "val/F1_1"
+  auto_insert_metric_name: False
+  filename: "E{epoch:03}-F1={val/F1_1:.4f}"
+  save_top_k: 5
+  save_last: True
